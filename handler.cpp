@@ -1,5 +1,4 @@
 #include <string>
-#include <iostream>
 
 int get_length(std::string input)
 {
@@ -58,6 +57,14 @@ std::string get_actions(std::string input)
             result += '/';
             break;
         
+        case '(':
+            result += '(';
+            break;
+
+        case ')':
+            result += ')';
+            break;
+
         default:
             break;
         }
@@ -113,8 +120,18 @@ int get_number(std::string input, int index)
 }
 
 
+int get_index(std::string input, char ch)
+{
+    for(int i = 0; i < input.length(); i++)
+    {
+        if(input[i] == ch) return i;
+    }
+
+    throw "Not found";
+}
+
+
 int calculate(std::string input)
 {
-    std::cout << get_actions(input) << std::endl;
-    return get_length(input);
+    if(get_length(input) == 1) return get_number(input, 0);
 }
