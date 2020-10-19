@@ -134,4 +134,6 @@ int get_index(std::string input, char ch)
 int calculate(std::string input)
 {
     if(get_length(input) == 1) return get_number(input, 0);
+
+    
 }
