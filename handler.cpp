@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <string>
 
@@ -171,5 +172,60 @@ int calculate(std::string input)
 {
     if(get_length(input) == 1) return get_number(input, 0);
 
-    return next_action(get_actions(input));
+    std::string result;
+
+    std::string buf;
+
+    int act = next_action(get_actions(input));
+
+    int first = get_number(input, act);
+    int second = get_number(input, act + 1);
+
+    switch(get_actions(input)[act])
+    {
+    case '*':
+        buf = std::to_string(first * second);
+        break;
+
+    case '/':
+        buf = std::to_string(first / second);
+        break;
+    
+    case '+':
+        buf = std::to_string(first + second);
+        break;
+    
+    case '-':
+        buf = std::to_string(first - second);
+        break;
+    }
+
+    for(int i = 0; i < get_length(input) - 1; i++)
+    {
+        if(i == act)
+        {
+            result += buf;
+        }
+        else
+        {
+            if(i + 1 == act)
+            {
+                result += std::to_string(get_number(input, i));
+                result += get_actions(input)[i];
+            }
+            else if(i - 1 == act)
+            {
+                result += get_actions(input)[i];
+                result += std::to_string(get_number(input, i + 1));
+            }
+            else
+            {
+                result += std::to_string(get_number(input, i));
+                result += get_actions(input)[i];
+                result += std::to_string(get_number(input, i + 1));
+            }
+        }
+    }
+
+    return calculate(result);
 }
