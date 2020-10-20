@@ -6,7 +6,11 @@ int main()
 {
     using namespace std;
 
-    cout << calculate("") << endl;
+    std::string input;
+
+    cin >> input;
+
+    cout << calculate(input) << endl;
 
     return 0;
 }
