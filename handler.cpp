@@ -1,4 +1,5 @@
 #include <string>
+#include <stdio.h>
 
 int get_length(std::string input)
 {
@@ -46,7 +47,7 @@ std::string get_actions(std::string input)
             break;
 
         case '-':
-            result += '-';
+            /*if(i != 0 && input[i - 1] != '(')*/ result += '-';
             break;
 
         case '*':
@@ -69,6 +70,24 @@ std::string get_actions(std::string input)
             break;
         }
     }
+
+    std::string buf;
+
+    for(int i = 0; i < result.length(); i++)
+    {
+        if(result[i] == '(' && result[i + 1] == ')')
+        {
+            i++;
+        }
+        else
+        {
+            buf += result[i];
+        }
+    }
+
+    printf("%s\n", buf.c_str());
+
+    result = buf;
 
     return result;
 }
@@ -148,21 +167,34 @@ void set_index(std::string input, char ch, int& var)
 
 int next_action(std::string input)
 {
-    int mul, div, sum, sub;
+    int result;
+    char last;
 
-    set_index(input, '*', mul);
-    set_index(input, '/', div);
-    set_index(input, '+', sum);
-    set_index(input, '-', sub);
+    std::string actions = get_actions(input);
 
-    if(mul != -1 && div != -1) return mul > div ? mul : div;
-    if(mul != -1) return mul;
-    if(div != -1) return div;
-    if(sum != -1 && sub != -1) return sum > sub ? sum : sub;
-    if(sum != -1) return sum;
-    if(sub != -1) return sub;
+    for(int i = 0; i < actions.length(); i++)
+    {
+        if(input[i] == '(' && last != '*')
+        {
+            return i + 1;
+        }
+        
+        if((input[i] == '*' || input[i] == '/') && last != '(' && last != '*')
+        {
+            result = i;
+            last = '*';
+        }
 
-    return 0;
+        if((input[i] == '+' || input[i] == '-') && last != '(' && last != '*' && last != '+')
+        {
+            result = i;
+            last = '+';
+        }
+    }
+
+    printf("%d\n", result);
+
+    return result;
 }
 
 
@@ -223,6 +255,7 @@ int calculate(std::string input)
                 result += std::to_string(get_number(input, i + 1));
             }
         }
+        printf("%s\n", result.c_str());
     }
 
     return calculate(result);
